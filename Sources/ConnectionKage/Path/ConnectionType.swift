@@ -17,18 +17,16 @@ public enum ConnectionType {
     case unknown
     
     init(path: NWPath) {
-        for interface in path.availableInterfaces {
-            if path.usesInterfaceType(interface.type) {
-                switch interface.type {
-                case .other: self = .unknown
-                case .wifi: self = .wifi
-                case .cellular: self = .cellular
-                case .wiredEthernet: self = .ethernet
-                case .loopback: self = .loopback
-                default: self = .unknown
-                }
-            }
+        if path.usesInterfaceType(.wifi) {
+            self = .wifi
+        } else if path.usesInterfaceType(.cellular) {
+            self = .cellular
+        } else if path.usesInterfaceType(.wiredEthernet) {
+            self = .ethernet
+        } else if path.usesInterfaceType(.loopback) {
+            self = .loopback
+        } else {
+            self = .unknown
         }
-        self = .unknown
     }
 }
